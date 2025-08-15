@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { Usulan } from '@/types'
 import { Calendar, MapPin, Building2, User, Eye } from 'lucide-react'
 import { format } from 'date-fns'
@@ -12,6 +13,8 @@ interface UsulanCardProps {
 }
 
 export default function UsulanCard({ usulan, onDetail }: UsulanCardProps) {
+  const [imageError, setImageError] = useState(false)
+  
   const getStatusBadgeColor = (statusNama: string) => {
     switch (statusNama.toLowerCase()) {
       case 'diajukan':
@@ -38,13 +41,14 @@ export default function UsulanCard({ usulan, onDetail }: UsulanCardProps) {
     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
       {/* Header dengan gambar atau placeholder */}
       <div className="h-48 bg-gradient-to-r from-blue-500 to-purple-600 relative">
-        {usulan.gambar_usulan && usulan.gambar_usulan.length > 0 ? (
+        {usulan.gambar_usulan && usulan.gambar_usulan.length > 0 && !imageError ? (
           <Image 
             src={usulan.gambar_usulan[0].file_path} 
             alt={usulan.judul}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            onError={() => setImageError(true)}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-white">
