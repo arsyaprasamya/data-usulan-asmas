@@ -43,15 +43,15 @@ Aplikasi pengelolaan Data Usulan Aset Modal (ASMAS) yang dibangun menggunakan Ne
 - Akun Supabase
 
 ### 1. Clone Repository
-\`\`\`bash
+```bash
 git clone https://github.com/arsyaprasamya/data-usulan-asmas.git
 cd data-usulan-asmas
-\`\`\`
+```
 
 ### 2. Install Dependencies
-\`\`\`bash
+```bash
 npm install
-\`\`\`
+```
 
 ### 3. Setup Database
 
@@ -67,12 +67,12 @@ npm install
 
 #### C. Setup Environment Variables
 1. Copy file environment:
-   \`\`\`bash
+   ```bash
    cp .env.example .env.local
-   \`\`\`
+   ```
 
 2. Isi nilai environment variables di \`.env.local\`:
-   \`\`\`bash
+   ```bash
    # Ambil dari Settings > API di Supabase Dashboard
    NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
@@ -80,12 +80,12 @@ npm install
    
    # Generate random secret untuk JWT
    JWT_SECRET=your_super_secret_jwt_key_at_least_256_bits
-   \`\`\`
+   ```
 
 ### 4. Jalankan Development Server
-\`\`\`bash
+```bash
 npm run dev
-\`\`\`
+```
 
 Aplikasi akan berjalan di [http://localhost:3000](http://localhost:3000)
 
@@ -101,7 +101,7 @@ Base URL: \`http://localhost:3000/api\`
 ### Authentication
 
 #### Generate Token
-\`\`\`http
+```http
 POST /api/auth/token
 Content-Type: application/json
 
@@ -109,10 +109,10 @@ Content-Type: application/json
   "email": "admin@usulan-asmas.com",
   "password": "admin123"
 }
-\`\`\`
+```
 
 Response:
-\`\`\`json
+```json
 {
   "success": true,
   "message": "Token berhasil dibuat",
@@ -126,30 +126,30 @@ Response:
     "expires_in": "24h"
   }
 }
-\`\`\`
+```
 
 ### Headers untuk API yang Memerlukan Authentication
-\`\`\`http
+```http
 Authorization: Bearer <jwt_token>
-\`\`\`
+```
 
 ### Master Data
 
 #### Get Master Data
-\`\`\`http
+```http
 GET /api/master
 Authorization: Bearer <token>
-\`\`\`
+```
 
 Response: Data SKPD, Periode, dan Status Usulan untuk dropdown
 
 ### Usulan Endpoints
 
 #### 1. Get List Usulan (dengan Filter dan Pagination)
-\`\`\`http
+```http
 GET /api/usulan?tahun=2024&status_id=1&skpd_id=1&search=pembangunan&page=1&limit=10
 Authorization: Bearer <token>
-\`\`\`
+```
 
 Query Parameters:
 - \`tahun\` (optional): Filter berdasarkan tahun periode
@@ -160,7 +160,7 @@ Query Parameters:
 - \`limit\` (optional): Jumlah per halaman (default: 10)
 
 Response:
-\`\`\`json
+```json
 {
   "success": true,
   "message": "Data usulan berhasil diambil",
@@ -206,16 +206,16 @@ Response:
     }
   }
 }
-\`\`\`
+```
 
 #### 2. Get Detail Usulan
-\`\`\`http
+```http
 GET /api/usulan/{id}
 Authorization: Bearer <token>
-\`\`\`
+```
 
 #### 3. Create Usulan Baru
-\`\`\`http
+```http
 POST /api/usulan
 Authorization: Bearer <token>
 Content-Type: application/json
@@ -241,10 +241,10 @@ Content-Type: application/json
     }
   ]
 }
-\`\`\`
+```
 
 #### 4. Update Usulan
-\`\`\`http
+```http
 PUT /api/usulan/{id}
 Authorization: Bearer <token>
 Content-Type: application/json
@@ -254,34 +254,34 @@ Content-Type: application/json
   "status_id": 3,
   // fields lainnya...
 }
-\`\`\`
+```
 
 #### 5. Delete Usulan (Soft Delete)
-\`\`\`http
+```http
 DELETE /api/usulan/{id}
 Authorization: Bearer <token>
-\`\`\`
+```
 
 ### Response Format
 
 Semua API menggunakan format response yang konsisten:
 
 Success Response:
-\`\`\`json
+```json
 {
   "success": true,
   "message": "Pesan sukses",
   "data": { ... }
 }
-\`\`\`
+```
 
 Error Response:
-\`\`\`json
+```json
 {
   "success": false,
   "message": "Pesan error"
 }
-\`\`\`
+```
 
 ### Error Codes
 - \`400\`: Bad Request - Data tidak valid
@@ -291,7 +291,7 @@ Error Response:
 
 ## Struktur Project
 
-\`\`\`
+```
 data-usulan-asmas/
 ├── database/
 │   └── schema.sql          # Database schema dan sample data
@@ -318,7 +318,7 @@ data-usulan-asmas/
 ├── .env.local              # Environment variables
 ├── .env.example           # Environment variables template
 └── README.md              # Dokumentasi project
-\`\`\`
+```
 
 ## Deployment
 
