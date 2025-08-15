@@ -94,6 +94,62 @@ Gunakan demo credentials:
 - **Email**: admin@usulan-asmas.com  
 - **Password**: admin123
 
+## ⚠️ **PENTING: Setup untuk Developer Lain**
+
+**Jika Anda clone project ini, Anda HARUS:**
+
+### **✅ Buat Supabase Project Sendiri:**
+1. **Daftar** di [supabase.com](https://supabase.com)
+2. **Buat project baru** (gunakan nama bebas)
+3. **Tunggu** hingga database ready (2-3 menit)
+
+### **✅ Import Database Schema:**
+1. **Masuk** ke Supabase Dashboard → **SQL Editor**
+2. **Klik** "New Query" 
+3. **Copy-paste** seluruh isi file `database_dump.sql`
+4. **Klik** "Run" untuk execute
+5. **✅ Selesai!** 5 tables + sample data terbuat otomatis
+
+### **✅ Setup Environment Variables:**
+1. **Copy** file environment:
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. **Ambil API keys** dari Supabase Dashboard → Settings → API
+3. **Isi** `.env.local` dengan keys Anda:
+   ```bash
+   NEXT_PUBLIC_SUPABASE_URL=https://[your-project-id].supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=[your-anon-key]
+   SUPABASE_SERVICE_ROLE_KEY=[your-service-role-key]
+   JWT_SECRET=[generate-random-32-chars]
+   ```
+
+4. **Generate JWT_SECRET:**
+   ```bash
+   # Option 1: Node.js
+   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+   
+   # Option 2: Manual
+   # Any random string 32+ characters
+   ```
+
+### **❌ JANGAN:**
+- Menggunakan database/keys yang sama dengan developer lain
+- Commit file `.env.local` ke git (sudah di-ignore)
+- Share service role key dengan orang lain
+
+### **✅ Setelah Setup:**
+```bash
+npm run dev
+# Login: admin@usulan-asmas.com / admin123  
+```
+
+**🎯 Kenapa harus setup database sendiri?**
+- **Security**: API keys harus private per developer
+- **Isolation**: Avoid data conflict antar developer  
+- **Best Practice**: Each dev environment independent
+
 ## API Documentation
 
 Base URL: \`http://localhost:3000/api\`
