@@ -295,14 +295,26 @@ Error Response:
 data-usulan-asmas/
 ├── database/
 │   └── schema.sql          # Database schema dan sample data
+├── public/                 # Static assets
+│   ├── next.svg           # Next.js logo
+│   ├── vercel.svg         # Vercel logo
+│   └── *.svg              # Other icons
 ├── src/
 │   ├── app/
 │   │   ├── api/            # REST API endpoints
 │   │   │   ├── auth/       # Authentication endpoints
+│   │   │   │   └── token/
+│   │   │   │       └── route.ts  # JWT token generation
 │   │   │   ├── usulan/     # Usulan CRUD endpoints
+│   │   │   │   ├── [id]/
+│   │   │   │   │   └── route.ts  # Individual usulan operations
+│   │   │   │   └── route.ts      # List & create usulan
 │   │   │   └── master/     # Master data endpoints
+│   │   │       └── route.ts      # Master data API
 │   │   ├── page.tsx        # Halaman utama dengan card layout
-│   │   └── layout.tsx      # Root layout
+│   │   ├── layout.tsx      # Root layout
+│   │   ├── globals.css     # Global styles
+│   │   └── favicon.ico     # App favicon
 │   ├── components/         # React components
 │   │   ├── UsulanCard.tsx  # Komponen card usulan
 │   │   ├── FilterBar.tsx   # Komponen filter dan search
@@ -315,8 +327,17 @@ data-usulan-asmas/
 │   │   └── api-client.ts   # Frontend API client
 │   └── types/
 │       └── index.ts        # TypeScript type definitions
-├── .env.local              # Environment variables
+├── database_dump.sql       # Complete database schema & sample data
+├── setup_database.sql      # Simple database setup
+├── simple_setup.sql        # Minimal database setup
 ├── .env.example           # Environment variables template
+├── .gitignore             # Git ignore rules
+├── eslint.config.mjs      # ESLint configuration
+├── next.config.ts         # Next.js configuration
+├── package.json           # Dependencies & scripts
+├── package-lock.json      # Dependency lock file
+├── postcss.config.mjs     # PostCSS configuration
+├── tsconfig.json          # TypeScript configuration
 └── README.md              # Dokumentasi project
 ```
 
