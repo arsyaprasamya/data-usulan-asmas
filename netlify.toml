@@ -1,0 +1,12 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NEXT_PUBLIC_SUPABASE_URL = "https://voaqrjuelbwtvwvwrymu.supabase.co"
+  NEXT_PUBLIC_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvYXFyanVlbGJ3dHZ3dndyeW11Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUyMjM0NzYsImV4cCI6MjA3MDc5OTQ3Nn0.rUCBeFGUtojHFAdZj3RZQty9TPqeAcMgb1Hm59UvmB4"
+  JWT_SECRET = "4f5c3cdc3b65acff50b83a86d64ccccd0982cd0738923828bd421e1038917037"
+  # SUPABASE_SERVICE_ROLE_KEY akan ditambahkan manual di dashboard untuk keamanan
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

@@ -1,5 +1,9 @@
 import { supabase } from './supabase'
 
+// Check if we're in build time or have proper env vars
+const isValidSupabaseConfig = process.env.NEXT_PUBLIC_SUPABASE_URL && 
+  process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://placeholder.supabase.co'
+
 export interface UsulanQuery {
   tahun?: number
   status_id?: number
@@ -26,8 +30,16 @@ export interface UsulanData {
 }
 
 export class DatabaseService {
+  // Helper method to check if we can perform database operations
+  private static canPerformDatabaseOps(): boolean {
+    return isValidSupabaseConfig
+  }
+
   // Get usulan with filters and pagination
   static async getUsulan(query: UsulanQuery) {
+    if (!this.canPerformDatabaseOps()) {
+      return { data: [], pagination: { page: 1, limit: 10, total: 0, total_pages: 0 } }
+    }
     const { tahun, status_id, skpd_id, search, page = 1, limit = 10 } = query
     
     let queryBuilder = supabase
