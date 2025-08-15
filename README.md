@@ -289,6 +289,239 @@ Error Response:
 - \`404\`: Not Found - Data tidak ditemukan
 - \`500\`: Internal Server Error - Kesalahan server
 
+## 🧪 **API Usage & Testing Guide**
+
+### **Prerequisites untuk Testing API**
+
+1. **Server running:**
+   ```bash
+   # Local development
+   npm run dev
+   # Server: http://localhost:3000
+   
+   # Production deployment
+   # Server: https://ornate-5001be.netlify.app
+   ```
+
+2. **Tools yang bisa digunakan:**
+   - **curl** (command line)
+   - **Postman** (GUI application)
+   - **Thunder Client** (VS Code extension)
+   - **Insomnia** (REST client)
+
+### **🔑 Step 1: Authentication (Wajib untuk semua endpoint)**
+
+**Generate Token:**
+```bash
+# Local
+curl -X POST http://localhost:3000/api/auth/token \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "admin@usulan-asmas.com",
+    "password": "admin123"
+  }'
+
+# Production
+curl -X POST https://ornate-5001be.netlify.app/api/auth/token \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "admin@usulan-asmas.com",
+    "password": "admin123"
+  }'
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Token berhasil dibuat",
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": {
+      "userId": "1",
+      "email": "admin@usulan-asmas.com", 
+      "role": "admin"
+    },
+    "expires_in": "24h"
+  }
+}
+```
+
+**⚠️ SAVE THE TOKEN** → Gunakan untuk semua request berikutnya dalam header:
+```
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+### **📋 Test A: Menampilkan Data Usulan (dengan Filtering)**
+
+#### **A1. Get All Usulan:**
+```bash
+curl -X GET http://localhost:3000/api/usulan \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+
+#### **A2. Filter by Tahun Periode:**
+```bash
+curl -X GET "http://localhost:3000/api/usulan?tahun=2024" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+
+#### **A3. Filter by Status Usulan:**
+```bash
+curl -X GET "http://localhost:3000/api/usulan?status_id=1" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+
+#### **A4. Filter by SKPD:**
+```bash
+curl -X GET "http://localhost:3000/api/usulan?skpd_id=1" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+
+#### **A5. Search by Nama/Judul:**
+```bash
+curl -X GET "http://localhost:3000/api/usulan?search=puskesmas" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+
+#### **A6. Combined Filtering (Semua Parameter):**
+```bash
+curl -X GET "http://localhost:3000/api/usulan?tahun=2024&status_id=1&skpd_id=1&search=pembangunan&page=1&limit=5" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+
+**Response Format:**
+```json
+{
+  "success": true,
+  "message": "Data usulan berhasil diambil",
+  "data": {
+    "data": [
+      {
+        "id": 1,
+        "judul": "Pembangunan Puskesmas Keliling",
+        "deskripsi": "Usulan pembangunan puskesmas...",
+        "pengusul": "Dr. Sari Wahyuni",
+        "skpd": {
+          "id": 1,
+          "nama": "Dinas Kesehatan"
+        },
+        "periode": {
+          "id": 2,
+          "tahun": 2024
+        },
+        "status_usulan": {
+          "id": 2,
+          "nama": "Dalam Review"
+        },
+        "gambar_usulan": [...]
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 10,
+      "total": 25,
+      "total_pages": 3
+    }
+  }
+}
+```
+
+### **➕ Test B: Menyimpan Data Usulan (dengan Multiple Gambar)**
+
+```bash
+curl -X POST http://localhost:3000/api/usulan \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "judul": "Test Usulan dari API Testing",
+    "deskripsi": "Deskripsi lengkap usulan yang dibuat melalui API untuk testing functionality lengkap aplikasi",
+    "pengusul": "John Doe, S.T",
+    "kode_wilayah": "31.01.05.001",
+    "latitude": -6.195000,
+    "longitude": 106.825000,
+    "skpd_id": 1,
+    "periode_id": 2,
+    "status_id": 1,
+    "gambar": [
+      {
+        "file_path": "/uploads/test/gambar1.jpg",
+        "keterangan": "Foto lokasi usulan dari depan"
+      },
+      {
+        "file_path": "/uploads/test/gambar2.jpg", 
+        "keterangan": "Foto detail area yang akan dibangun"
+      },
+      {
+        "file_path": "/uploads/test/gambar3.jpg",
+        "keterangan": "Foto kondisi eksisting saat ini"
+      }
+    ]
+  }'
+```
+
+### **✏️ Test C: Mengubah Data Usulan (Update Lengkap)**
+
+```bash
+curl -X PUT http://localhost:3000/api/usulan/4 \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "judul": "Test Usulan UPDATED - Versi Terbaru",
+    "deskripsi": "Deskripsi yang sudah diperbarui dengan informasi terbaru",
+    "pengusul": "Jane Smith, S.T, M.Eng", 
+    "skpd_id": 2,
+    "periode_id": 3,
+    "status_id": 2
+  }'
+```
+
+### **🗑️ Test D: Menghapus Data Usulan (Soft Delete)**
+
+```bash
+curl -X DELETE http://localhost:3000/api/usulan/4 \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+
+### **🔐 Test E: Authorization Testing**
+
+#### **Tanpa Token (Should Fail):**
+```bash
+curl -X GET http://localhost:3000/api/usulan
+```
+
+#### **Token Invalid (Should Fail):**
+```bash
+curl -X GET http://localhost:3000/api/usulan \
+  -H "Authorization: Bearer invalid_token"
+```
+
+### **🤖 Automated Testing**
+
+```bash
+# Make script executable
+chmod +x test_api.sh
+
+# Test local development
+./test_api.sh local
+
+# Test production deployment
+./test_api.sh prod
+```
+
+### **🌐 Production Testing**
+
+Ganti base URL ke: `https://ornate-5001be.netlify.app`
+
+### **📝 Testing Checklist**
+
+- [ ] Authentication: Token generation
+- [ ] GET /api/usulan: List dengan filtering
+- [ ] POST /api/usulan: Create dengan multiple gambar  
+- [ ] PUT /api/usulan/{id}: Update lengkap
+- [ ] DELETE /api/usulan/{id}: Soft delete
+- [ ] Authorization: 401 error handling
+
 ## Struktur Project
 
 ```
@@ -341,17 +574,33 @@ data-usulan-asmas/
 └── README.md              # Dokumentasi project
 ```
 
+## 🚀 **Live Demo**
+
+**✅ Aplikasi sudah live dan dapat diakses di:**
+**[https://ornate-5001be.netlify.app/](https://ornate-5001be.netlify.app/)**
+
+**Demo Login:**
+- **Email:** admin@usulan-asmas.com  
+- **Password:** admin123
+
 ## Deployment
 
-### Vercel (Recommended)
+### Netlify (Current Deployment) ✅
+1. **Push ke repository GitHub** ✅
+2. **Connect repository ke Netlify** ✅  
+3. **Set environment variables di Netlify dashboard** ✅
+4. **Auto-deploy on push** ✅
+5. **Live URL:** [https://ornate-5001be.netlify.app/](https://ornate-5001be.netlify.app/)
+
+### Alternative: Vercel 
 1. Push ke repository GitHub
 2. Connect repository ke Vercel
 3. Set environment variables di Vercel dashboard
 4. Deploy otomatis
 
 ### Manual Deployment
-1. Build project: \`npm run build\`
-2. Start production server: \`npm start\`
+1. Build project: `npm run build`
+2. Start production server: `npm start`
 
 ### Database Migration
 Untuk production, gunakan Supabase Migration tool atau jalankan SQL manual di Supabase dashboard.
