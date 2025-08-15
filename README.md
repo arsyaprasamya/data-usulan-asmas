@@ -44,7 +44,7 @@ Aplikasi pengelolaan Data Usulan Aset Modal (ASMAS) yang dibangun menggunakan Ne
 
 ### 1. Clone Repository
 \`\`\`bash
-git clone <repository-url>
+git clone https://github.com/arsyaprasamya/data-usulan-asmas.git
 cd data-usulan-asmas
 \`\`\`
 
